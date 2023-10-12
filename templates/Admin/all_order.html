@@ -1,0 +1,110 @@
+{% extends 'Admin/admin_base.html' %}
+{% load static %}
+{% block content %}
+    <main>
+        <div class="table-responsive " style="margin: 0px; margin-top: 10px;">
+            <table class="table">
+                <thead>
+                    <tr class="text-center">
+                        
+                        <th scope="col" class="table-secondary text-nowrap">ID</th>
+                        <th scope="col" class="table-secondary text-nowrap">NAME</th>
+                        <th scope="col" class="table-secondary text-nowrap">DATE</th>
+                        <th scope="col" class="table-secondary text-nowrap">AMOUNT</th>
+                        <th scope="col" class="table-secondary text-nowrap">STATUS</th>
+                        <th scope="col" class="table-secondary text-nowrap">ACTION</th>
+                        
+    
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in order %}  
+                        <tr class="text-center">
+                            
+                            <td  class="table-secondary text-nowrap">{{ forloop.counter }}</td>
+                            <td  class="table-secondary text-nowrap">{{ order.user }}</td>
+                            <td class="table-secondary text-nowrap">{{ order.date }}</td>
+                            <td  class="table-secondary text-nowrap">{{ order.total_amount_with_8 | floatformat:2 }} </td>
+                            <td  class="table-secondary text-nowrap">
+                                <form method="post" action="{% url 'order_update' order_id=order.id %}">
+                                    {% csrf_token %}
+                                    
+                                    <button type="submit" name="status" value="PENDING" 
+                                        {% if order.status == 'PENDING' %}
+                                            class="status-button active"
+                                        {% else %}
+                                            class="status-button" 
+                                        {% endif %}
+                                        >
+                                        Pending
+                                    </button>
+                
+                                    <button type="submit" name="status" value="ORDER CORNFIMED"
+                                        {% if order.status == 'ORDER CORNFIMED' %}
+                                            class="status-button active" 
+                                        {% else %}
+                                            class="status-button" 
+                                        {% endif %}
+                                        >
+                                        Confirmed
+                                    </button>
+                
+                                    <button type="submit" name="status" value="SHIPPED" 
+                                        {% if order.status == 'SHIPPED' %}
+                                            class="status-button active" 
+                                        {% else %}
+                                            class="status-button" 
+                                        {% endif %}
+                                        >
+                                        Shipped
+                                    </button>
+                
+                                    {% if order.status == 'SHIPPED' %}
+                                        <input type="text" name="delivery_espected" value="{{ order.delivery_espected }}" placeholder="delivery_espected">
+                                        <input type="submit" value="save">
+                                    {% else %}
+                                        <input type="hidden" name="delivery_espected" value="{{ order.delivery_espected }}">
+                                    {% endif %}
+                
+                                    <button type="submit" name="status" value="ORDER DONE" 
+                                        {% if order.status == 'ORDER DONE' %}
+                                            class="status-button active"
+                                        {% else %}
+                                            class="status-button" 
+                                        {% endif %}
+                                        >
+                                        Done
+                                    </button>
+                                </form>
+                            </td>
+                            <td  class="table-secondary text-nowrap">
+                                <a href="{% url 'order_view' order_id=order.id %}">view</a> 
+                            </td>     
+                            
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <style>
+        .status-button {
+            background-color: lightgray;
+            border: none;
+            padding: 5px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    
+        .status-button.active {
+            background-color: green;
+            color: white;
+            border-radius: 5px;
+        }
+    </style>
+
+    
+    
+{% endblock %}

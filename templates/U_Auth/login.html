@@ -1,0 +1,31 @@
+{% extends "User/base.html" %}
+{% load static %}
+{% block content %}
+{% include 'User/header.html' %}
+      
+    
+<main>
+	<div class="px-5 pt-5" >
+		<div class="basic-login mb-50">
+			<h5>Login</h5>
+			<form action="{% url 'login' %}" method="post">
+				{% csrf_token %}
+				<label for="name">Username or email address  <span>*</span></label>
+				<input id="name" type="text" name="username" required placeholder="Enter Username">
+				<label for="pass">Password <span>*</span></label>
+				<input id="pass" name="password" type="password" required placeholder="Enter password...">
+				<div class="login-action mb-10 fix">
+					
+					<p>Dont have an account<span><a href="{% url 'register' %}">register</a></span></p>
+				</div>
+				<button type="submit" class="tp-in-btn w-100">log in</button>
+			</form>
+		</div>
+	</div>
+
+</main>
+	{% include 'User/footer.html' %}
+	{% endblock content %}
+    
+
+	

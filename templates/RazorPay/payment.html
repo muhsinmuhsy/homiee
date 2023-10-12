@@ -1,0 +1,387 @@
+{% extends "User/base.html" %}
+{% load static %}
+{% block content %}
+{% include 'User/header.html' %}
+      
+    
+<main>
+	<br><br><br>
+
+	<!-- checkout-area-start -->
+	<section class="checkout-area pb-85">
+		<div class="container">
+			{% if subtotal == 0 %}
+			{% else %}
+				
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="checkbox-form">
+								<h3>Billing Details</h3>
+								
+									
+									<div class="row">
+										
+										<div class="col-md-6">
+											<div class="checkout-form-list">
+												<label>First Name <span class="required">*</span></label>
+												<input type="text"  required readonly name="first_name" placeholder="{{ order.first_name }}">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="checkout-form-list">
+												<label>Last Name <span class="required">*</span></label>
+												<input type="text" required readonly name="last_name" placeholder="{{ order.last_name }}">
+											</div>
+										</div>
+										<!-- <div class="col-md-12">
+											<div class="checkout-form-list">
+												<label>Company Name</label>
+												<input type="text" placeholder="">
+											</div>
+										</div> -->
+										<div class="col-md-12">
+											<div class="checkout-form-list">
+												<label>Address <span class="required">*</span></label>
+												<input type="text" readonly name="address"  required placeholder="{{ order.address }}">
+											</div>
+										</div>
+										<!-- <div class="col-md-12">
+											<div class="checkout-form-list">
+												<input type="text" placeholder="Apartment, suite, unit etc. (optional)">
+											</div>
+										</div> -->
+										<div class="col-md-12">
+											<div class="checkout-form-list">
+												<label>Town / City <span class="required">*</span></label>
+												<input type="text" readonly name="city" placeholder="{{ order.city }}">
+											</div>
+										</div>
+										<!-- <div class="col-md-6">
+											<div class="checkout-form-list">
+												<label>State / County <span class="required">*</span></label>
+												<input type="text" placeholder="">
+											</div>
+										</div> -->
+										<div class="col-md-6">
+											<div class="checkout-form-list">
+												<label>Pincode / Zip <span class="required">*</span></label>
+												<input type="text" readonly name="postel_code" placeholder="Pincode / Zip">
+											</div>
+										</div>
+										<!-- <div class="col-md-6">
+											<div class="checkout-form-list">
+												<label>Email Address <span class="required">*</span></label>
+												<input type="email" placeholder="">
+											</div>
+										</div> -->
+										<div class="col-md-6">
+											<div class="checkout-form-list">
+												<label>Phone <span class="required">*</span></label>
+												<input type="text" readonly name="phone" placeholder="{{ order.phone }}">
+											</div>
+										</div>
+										<!-- <div class="order-notes">
+											<div class="checkout-form-list">
+												<label>Order Notes</label>
+												<textarea id="checkout-mess" cols="30" readonly name="order_note" rows="10" placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
+											</div>
+										</div> -->
+										
+										
+									</div>
+								
+								
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="your-order mb-30 ">
+								<h3>Your order</h3>
+								<div class="your-order-table table-responsive">
+									<table>
+										<thead>
+											<tr>
+												<th class="product-name">Product</th>
+												<th class="product-total">Total</th>
+											</tr>
+										</thead>
+										<tbody>
+											
+											{% for cart in order.cart.all %}
+												<tr class="cart_item">
+													<td class="product-name">
+														{{ cart.product.name }} <strong class="product-quantity"> × {{ cart.quantity }}</strong>
+													</td>
+													<td class="product-total">
+														<span class="amount">{{ cart.total }}</span>
+													</td>
+												</tr>
+											{% endfor %}
+										</tbody>
+										<tfoot>
+											<tr class="cart-subtotal">
+												<th>Cart Subtotal</th>
+												<td><span class="amount">{{ subtotal }}</span></td>
+											</tr>
+											<tr class="shipping">
+												<th>Shipping</th>
+												<td>
+													<ul>
+														{% if subtotal >= 50 %}
+															<li>
+																
+																<label>
+																	<span class="amount">0</span>
+																</label>
+															</li>
+														{% else %}
+															<li>
+																	
+																<label>
+																	<span class="amount">8</span>
+																</label>
+															</li>
+														{% endif %}
+													</ul>
+												</td>
+											</tr>
+											<tr class="order-total">
+												<th>Order Total</th>
+												<td><strong><span class="amount">{{ total_of_total }}</span></strong>
+												</td>
+											</tr>
+										</tfoot>
+									</table>
+								</div>
+
+								<div class="payment-method">
+									<div class="accordion" id="checkoutAccordion">
+									<!-- <div class="accordion-item">
+										<h2 class="accordion-header" id="checkoutOne">
+											<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#bankOne" aria-expanded="true" aria-controls="bankOne">
+											Direct Bank Transfer
+											</button>
+										</h2>
+										<div id="bankOne" class="accordion-collapse collapse show" aria-labelledby="checkoutOne" data-bs-parent="#checkoutAccordion">
+											<div class="accordion-body">
+											<p>Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
+											</div>
+										</div>
+									</div>
+									<div class="accordion-item">
+										<h2 class="accordion-header" id="paymentTwo">
+											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#payment" aria-expanded="false" aria-controls="payment">
+											Cheque Payment
+											</button>
+										</h2>
+										<div id="payment" class="accordion-collapse collapse" aria-labelledby="paymentTwo" data-bs-parent="#checkoutAccordion">
+											<div class="accordion-body">
+											<p>Please send your cheque to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
+											</div>
+										</div>
+									</div>
+									<div class="accordion-item">
+										<h2 class="accordion-header" id="paypalThree">
+											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#paypal" aria-expanded="false" aria-controls="paypal">
+											PayPal
+											</button>
+										</h2>
+										<div id="paypal" class="accordion-collapse collapse" aria-labelledby="paypalThree" data-bs-parent="#checkoutAccordion">
+											<div class="accordion-body">
+												<p>Pay via PayPal; you can pay with your credit card if you don’t have a
+												PayPal account.</p>
+											</div>
+										</div>
+									</div> -->
+									</div>
+									<div class="order-button-payment mt-10">
+										<button id="rzp-button1" class="btn btn-primary">Pay with Razorpay</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+			
+			{% endif %}
+		</div>
+	</section>
+	<!-- checkout-area-end -->
+
+	<!-- cta-area-start -->
+	<section class="cta-area d-ldark-bg pt-55 pb-10">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-4 col-md-6">
+					<div class="cta-item cta-item-d mb-30">
+						<h5 class="cta-title">Follow Us</h5>
+						<p>We make consolidating, marketing and tracking your social media website easy.</p>
+						<div class="cta-social">
+							<div class="social-icon">
+								<a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a>
+								<a href="#" class="twitter"><i class="fab fa-twitter"></i></a>
+								<a href="#" class="youtube"><i class="fab fa-youtube"></i></a>
+								<a href="#" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
+								<a href="#" class="rss"><i class="fas fa-rss"></i></a>
+								<a href="#" class="dribbble"><i class="fab fa-dribbble"></i></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6">
+					<div class="cta-item mb-30">
+						<h5 class="cta-title">Sign Up To Newsletter</h5>
+						<p>Join 60.000+ subscribers and get a new discount coupon  on every Saturday.</p>
+						<div class="subscribe__form">
+							<form action="#">
+								<input type="email" placeholder="Enter your email here...">
+								<button>subscribe</button>
+							</form>
+						</div>
+					</div>
+				</div>
+				<!-- <div class="col-lg-4 col-md-6">
+					<div class="cta-item mb-30">
+						<h5 class="cta-title">Download App</h5>
+						<p>DukaMarket App is now available on App Store & Google Play. Get it now.</p>
+						<div class="cta-apps">
+							<div class="apps-store">
+								<a href="#"><img src="assets/img/brand/app_ios.png" alt=""></a>
+								<a href="#"><img src="assets/img/brand/app_android.png" alt=""></a>
+							</div>
+						</div>
+					</div>
+				</div> -->
+			</div>
+		</div>
+
+	</section>
+	<!-- cta-area-end -->
+
+	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+var options = {
+    "key": "rzp_test_GGmhwGLGUs22Xl", // Enter the Key ID generated from the Dashboard
+    "amount": "{{payment.amount}}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+	"name": "{{order.first_name}} {{order.last_name}}",
+    "description": "Test Transaction",
+    "image": "https://example.com/your_logo",
+    "order_id": "{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "handler": function (response){
+		var order_id = "{{ order.id }}";  // Get the order_id from your template context
+   		window.location.href = '/payment-success/' + order_id + '/';
+		
+
+        alert(response.razorpay_order_id + ' - Payment completed');
+        alert(response.razorpay_signature + ' - Payment completed')
+    },
+    
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+var rzp1 = new Razorpay(options);
+rzp1.on('payment.failed', function (response){
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+});
+document.getElementById('rzp-button1').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+</script>
+
+</main>
+	{% include 'User/footer.html' %}
+	{% endblock content %}
+    
+
+	<style>
+		/* Foe Quantiys */
+		.quantity-wrapper {
+		display: inline-block;
+		border: 2px solid #ccc;
+		border-radius: 5px;
+		padding: 5px;
+		}
+	
+		.quantity-button {
+		display: inline-block;
+		width: 25px;
+		height: 25px;
+		text-align: center;
+		line-height: 25px;
+		background-color: #f0f0f0;
+		color: #333;
+		text-decoration: none;
+		border-radius: 50%;
+		font-weight: bold;
+		font-size: 18px;
+		margin: 0 5px;
+		}
+	
+		.quantity {
+		display: inline-block;
+		width: 30px;
+		height: 30px;
+		line-height: 30px;
+		text-align: center;
+		font-weight: bold;
+		font-size: 16px;
+		}
+	
+		@media (max-width: 767px) {
+			.quantity-wrapper{
+				display: flex;
+			}
+			.lazy{
+				display: none;
+			}
+		}
+	
+	</style>
+
+
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+var options = {
+    "key": "rzp_test_GGmhwGLGUs22Xl", // Enter the Key ID generated from the Dashboard
+    "amount": "{{payment.amount}}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+	"name": "{{order.first_name}} {{order.last_name}}",
+    "description": "Test Transaction",
+    "image": "https://example.com/your_logo",
+    "order_id": "{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "handler": function (response){
+		var order_id = "{{ order.id }}";  // Get the order_id from your template context
+   		window.location.href = '/payment-success/' + order_id + '/';
+		
+
+        alert(response.razorpay_order_id + ' - Payment completed');
+        alert(response.razorpay_signature + ' - Payment completed')
+    },
+    
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+var rzp1 = new Razorpay(options);
+rzp1.on('payment.failed', function (response){
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+});
+document.getElementById('rzp-button1').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+</script>
