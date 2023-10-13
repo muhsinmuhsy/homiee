@@ -1,76 +1,37 @@
 {% extends "User/base.html" %}
 {% load static %}
 {% block content %}
+{% include 'User/header.html' %}
 	
-	<main class="bg_gray">
+	<main>
 		
-	<div class="container margin_30">
-		<div class="page_header">
-			
-		<h1 style="text-align: center;">Edit Account</h1>
-	</div>
-	<!-- /page_header -->
-			<div class="row justify-content-center">
-			
-			<div class="col-xl-8 col-lg-8 col-md-8">
-				<div class="box_account">
-                    <form method="post" >
-                        {% csrf_token %}
-                        <div class="form_container">
-                            
-                            <div class="private box">
-                                <div class="row no-gutters">
-                                    <div class="col-6 pr-1">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" name="first_name" value="{{ user.first_name }}" placeholder="Name">
-                                        </div>
-                                    </div>
-                                    <div class="col-6 pl-1">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" name="last_name" value="{{ user.last_name }}" placeholder="Last Name">
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" name="address" value="{{ user.address }}" placeholder="Full Address">
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /row -->
-                                <div class="row no-gutters">
-                                    <div class="col-6 pr-1">
-                                        <div class="form-group">
-                                            <input type="email" class="form-control" value="{{ user.email }}"  name="email" placeholder="Email">
-                                        </div>
-                                    </div>
-                                    <div class="col-6 pl-1">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" name="mobile" value="{{ user.mobile }}" placeholder="Mobile">
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /row -->
-                                <hr>
-                                
-                                <!-- /row -->
-                                
-                            </div>
-                                                       
-                            <hr>
-                            
-                            <div class="text-center"><input type="submit" value="Update" class="btn_1 full-width"></div>
-                        </div>
-                    </form> 
-
-					<!-- /form_container -->
-				</div>
-				<!-- /box_account -->
-			</div>
-		</div>
-		<!-- /row -->
-		</div>
-		<!-- /container -->
+        <div class="basic-login px-5 pb-5 pt-5">
+            <h5>Edit Ypur Profile</h5>
+            <form method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-6">
+                        <input type="text" class="form-control" name="first_name" value="{{ user.first_name }}" placeholder="Name">
+                    </div>
+                    <div class="col-6">
+                        <input type="text" class="form-control" name="last_name" value="{{ user.last_name }}" placeholder="Last Name">
+                    </div>
+                    <div class="col-6">
+                        <input type="text" class="form-control" name="address" value="{{ user.address }}" placeholder="Full Address">
+                    </div>
+                    <div class="col-6">
+                        <input type="email" class="form-control" value="{{ user.email }}"  name="email" placeholder="Email">
+                    </div>
+                    <div class="col-6">
+                        <input type="text" class="form-control" name="mobile" value="{{ user.mobile }}" placeholder="Mobile">
+                    </div>
+                    
+                    
+                </div>
+                <button type="submit" class="tp-in-btn w-100">Register</button>
+            </form>
 	</main>
 	<!--/main-->
 
-{% endblock content %}
+    {% include 'User/footer.html' %}
+	{% endblock content %}

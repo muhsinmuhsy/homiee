@@ -14,6 +14,9 @@ def home(request):
     current_page = 'home'
     products = Product.objects.all()[:5]
     products_one = Product.objects.all()[5:10]
+    products_two = Product.objects.all()[4:5]
+    products_three = Product.objects.all()[1:5]
+
 
     # Calculate the total rating for each product
     for product in products:
@@ -22,7 +25,9 @@ def home(request):
     context = {
         'current_page': current_page,
         'products': products,
+        'products_two' : products_two,
         'products_one': products_one,  # Remove the extra space
+        'products_three' : products_three
     }
     return render(request, 'User/home.html', context)
 
@@ -448,4 +453,4 @@ def header(request):
     context = {
         'cart_count' : cart_count
     }
-    return render(request, 'header.html', context)
+    return render(request, 'User/header.html', context)

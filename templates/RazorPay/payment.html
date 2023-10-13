@@ -11,6 +11,9 @@
 	<section class="checkout-area pb-85">
 		<div class="container">
 			{% if subtotal == 0 %}
+			<a href="{% url 'home' %}" style="color: blue; display: flex; justify-content: center;">
+				Go back to home
+			</a>
 			{% else %}
 				
 					<div class="row">
@@ -24,13 +27,13 @@
 										<div class="col-md-6">
 											<div class="checkout-form-list">
 												<label>First Name <span class="required">*</span></label>
-												<input type="text"  required readonly name="first_name" placeholder="{{ order.first_name }}">
+												<input type="text"  required readonly style="border: none;"  name="first_name" placeholder="{{ order.first_name }}">
 											</div>
 										</div>
 										<div class="col-md-6">
 											<div class="checkout-form-list">
 												<label>Last Name <span class="required">*</span></label>
-												<input type="text" required readonly name="last_name" placeholder="{{ order.last_name }}">
+												<input type="text" required readonly style="border: none;" name="last_name" placeholder="{{ order.last_name }}">
 											</div>
 										</div>
 										<!-- <div class="col-md-12">
@@ -42,7 +45,7 @@
 										<div class="col-md-12">
 											<div class="checkout-form-list">
 												<label>Address <span class="required">*</span></label>
-												<input type="text" readonly name="address"  required placeholder="{{ order.address }}">
+												<input type="text" readonly style="border: none;" name="address"  required placeholder="{{ order.address }}">
 											</div>
 										</div>
 										<!-- <div class="col-md-12">
@@ -53,7 +56,7 @@
 										<div class="col-md-12">
 											<div class="checkout-form-list">
 												<label>Town / City <span class="required">*</span></label>
-												<input type="text" readonly name="city" placeholder="{{ order.city }}">
+												<input type="text" readonly style="border: none;" name="city" placeholder="{{ order.city }}">
 											</div>
 										</div>
 										<!-- <div class="col-md-6">
@@ -65,7 +68,7 @@
 										<div class="col-md-6">
 											<div class="checkout-form-list">
 												<label>Pincode / Zip <span class="required">*</span></label>
-												<input type="text" readonly name="postel_code" placeholder="Pincode / Zip">
+												<input type="text" readonly style="border: none;" name="postel_code" placeholder="Pincode / Zip">
 											</div>
 										</div>
 										<!-- <div class="col-md-6">
@@ -77,13 +80,13 @@
 										<div class="col-md-6">
 											<div class="checkout-form-list">
 												<label>Phone <span class="required">*</span></label>
-												<input type="text" readonly name="phone" placeholder="{{ order.phone }}">
+												<input type="text" readonly style="border: none;" name="phone" placeholder="{{ order.phone }}">
 											</div>
 										</div>
 										<!-- <div class="order-notes">
 											<div class="checkout-form-list">
 												<label>Order Notes</label>
-												<textarea id="checkout-mess" cols="30" readonly name="order_note" rows="10" placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
+												<textarea id="checkout-mess" cols="30" readonly style="border: none;" name="order_note" rows="10" placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
 											</div>
 										</div> -->
 										

@@ -5,6 +5,7 @@
       
     
 <main>
+	{% include 'User/alert.html' %}
 	<!-- page-banner-area-start -->
 	<!-- <div class="page-banner-area page-banner-height-2" data-background="assets/img/banner/page-banner-4.jpg">
 		<div class="container">
@@ -73,6 +74,10 @@
 									{% else %}	
 									<tr>
 										<td colspan="5" class="text-center">Your cart is empty</td>
+										
+										<td class="product-subtotal">
+											<a href="{% url 'shop' %}" style="color: blue;">Shop Now</a>
+										</td>
 									</tr>
 								{% endif %}
 								</tbody>

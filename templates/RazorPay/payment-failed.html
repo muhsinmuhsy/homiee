@@ -1,7 +1,32 @@
 {% extends "User/base.html" %}
 {% load static %}
 {% block content %}
+{% include 'User/header.html' %}
 
-    <h1 style="display: flex; justify-content: center;">Payment Field</h1>
-
+   <main>
+    <div class="d-flex justify-content-center mt-100" >
+        <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72">
+            <g fill="none" stroke="#8EC343" stroke-width="2">
+                <circle cx="36" cy="36" r="35" style="stroke-dasharray:240px, 240px; stroke-dashoffset: 480px;"></circle>
+                <path d="M17.417,37.778l9.93,9.909l25.444-25.393" style="stroke-dasharray:50px, 50px; stroke-dashoffset: 0px;"></path>
+            </g>
+        </svg>
+    </div>
+    <div class="d-flex justify-content-center mt-5" >
+         <h2 >Payment Faild</h2>
+         
+    </div>
+    <!-- <div class="d-flex justify-content-center mt-10" >
+        <a href="{% url 'order_list' %}" style="color: green;">
+            Go to Order Lists
+        </a>
+    </div> -->
+    <div class="d-flex justify-content-center mt-10" >
+        <a href="{% url 'home' %}" style="color: blue;">
+            Return to Home
+        </a>
+    </div>
+    <br>
+   </main>
+   {% include 'User/footer.html' %}
 {% endblock content %}

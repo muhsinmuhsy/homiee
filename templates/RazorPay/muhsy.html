@@ -2,176 +2,31 @@
 {% extends "User/base.html" %}
 {% load static %}
 {% block content %}
-	<style>
-		img {
-			width: 200px;
-		}
-	</style>
 
-	
-	<main class="bg_gray">
-	
-		
-	<div class="container margin_30">
-		<div class="page_header">
-			<div class="breadcrumbs">
-				
-		</div>
-		
-			
-	</div>
-	<!-- /page_header -->
-			<div class="row">
-				<div class="col-lg-6 col-md-6">
-					<div class="step first">
-						<h3> User Info and Billing address</h3>
-					<ul class="nav nav-tabs" id="tab_checkout" role="tablist">
-					  <li class="nav-item">
-						<a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#tab_1" role="tab" aria-controls="tab_1" aria-selected="true">Address</a>
-					  </li>
-					  <!-- <li class="nav-item">
-						<a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#tab_2" role="tab" aria-controls="tab_2" aria-selected="false">Login</a>
-					  </li> -->
-					</ul>
-					<div class="tab-content checkout">
-						<div class="tab-pane fade show active" id="tab_1" role="tabpanel" aria-labelledby="tab_1">
-							
-							
-						
-								<div class="row no-gutters">
-									<div class="col-6 form-group pr-1">
-										<p>{{ order.first_name }} {{ order.last_name }} </p>
-									</div>
-									<div class="col-6 form-group pl-1">
-										
-									</div>
-								</div>
-								<!-- /row -->
-								<div class="form-group">
-									<p>{{ order.address }}</p>
-								</div>
-								<div class="row no-gutters">
-									<div class="col-6 form-group pr-1">
-										<p>{{ order.city }}</p>
-									</div>
-									<div class="col-6 form-group pl-1">
-										<p>PIN CODE : {{ order.postel_code }}</p>
-									</div>
-								</div>
-								<!-- /row -->
-								<!-- <div class="row no-gutters">
-									<div class="col-md-12 form-group">
-										<div class="custom-select-form">
-											<select class="wide add_bottom_15" name="country" id="country">
-												<option value="" selected>Country</option>
-												<option value="Europe">Europe</option>
-												<option value="United states">United states</option>
-												<option value="Asia">Asia</option>
-											</select>
-										</div>
-									</div>
-								</div> -->
-								<!-- /row -->
-								<div class="form-group">
-									<p>{{ order.phone }}</p>
-								</div>
-
-								<hr>
-
-								
-
-								
-		
-							
-						</div>
-						<!-- /tab_1 -->
-					  
-						<!-- /tab_2 -->
-					</div>
-					</div>
-					<!-- /step -->
-				</div>
-				
-				<div class="col-lg-6 col-md-6">
-					<div class="step last">
-						<h3> Order Summary</h3>
-					<div class="box_general summary">
-						<ul>
-							{% for cart in order.cart.all %}
-								<li class="clearfix"><em>{{ cart.product.name }}</em>  <span>{{ cart.total }}</span></li>
-							{% endfor %}
-						</ul>
-						{% if subtotal == 0 %}
-							
-							<p>Cart is empty</p>
-						{% else %}
-							<ul>
-								<li class="clearfix"><em><strong>Subtotal</strong></em>  <span>AUD {{ subtotal }}</span></li>
-								{% if subtotal >= 50 %}
-									<li class="clearfix"><em><strong>Shipping</strong></em> <span>AUD 0</span></li>
-								{% else %}
-									<li class="clearfix"><em><strong>Shipping</strong></em> <span>AUD 8</span></li>
-								{% endif %}
-								
-							</ul>
-							<div class="total clearfix">TOTAL <span>AUD {{ total_of_total }}</span></div>
-							<div style="display: flex; justify-content: center;">
-								{{ paypal.render }}
-							</div>
-						{% endif %}
-						
-					</div>
-					<!-- /box_general -->
-					</div>
-					<!-- /step -->
-				</div>
-			</div>
-			<!-- /row -->
-		</div>
-		<!-- /container -->
-	</main>
-	<!--/main-->
-	<button id="rzp-button1">Pay with Razorpay</button>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script>
-var options = {
-    "key": "rzp_test_GGmhwGLGUs22Xl", // Enter the Key ID generated from the Dashboard
-    "amount": "{{payment.amount}}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-    "currency": "INR",
-	"name": "{{order.first_name}} {{order.last_name}}",
-    "description": "Test Transaction",
-    "image": "https://example.com/your_logo",
-    "order_id": "{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-    "handler": function (response){
-		var order_id = "{{ order.id }}";  // Get the order_id from your template context
-   		window.location.href = '/payment-success/' + order_id + '/';
-		
-
-        alert(response.razorpay_order_id + ' - Payment completed');
-        alert(response.razorpay_signature + ' - Payment completed')
-    },
-    
-    "theme": {
-        "color": "#3399cc"
-    }
-};
-var rzp1 = new Razorpay(options);
-rzp1.on('payment.failed', function (response){
-        alert(response.error.code);
-        alert(response.error.description);
-        alert(response.error.source);
-        alert(response.error.step);
-        alert(response.error.reason);
-        alert(response.error.metadata.order_id);
-        alert(response.error.metadata.payment_id);
-});
-document.getElementById('rzp-button1').onclick = function(e){
-    rzp1.open();
-    e.preventDefault();
-}
-</script>
-	
-
+    <main class="bg_gray">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div id="confirm">
+                        <div class="icon icon--order-success svg add_bottom_15">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72">
+                                <g fill="none" stroke="#8EC343" stroke-width="2">
+                                    <circle cx="36" cy="36" r="35" style="stroke-dasharray:240px, 240px; stroke-dashoffset: 480px;"></circle>
+                                    <path d="M17.417,37.778l9.93,9.909l25.444-25.393" style="stroke-dasharray:50px, 50px; stroke-dashoffset: 0px;"></path>
+                                </g>
+                            </svg>
+                        </div>
+                    <h2>Payment completed!</h2>
+                    
+                    </div>
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+        <!-- <p>{{ data }}</p>
+        <p>{{ order_id }}</p> -->
+        
+    </main>
+    <!--/main-->
 {% endblock content %}
-
-

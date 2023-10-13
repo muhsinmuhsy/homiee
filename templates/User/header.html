@@ -529,11 +529,12 @@
             </a>
         </div>
         <div class="offcanvas__search mb-25">
-            <form action="#">
-                <input type="text" placeholder="What are you searching for?">
+            <form id="mobile-search-form" method="get" action="{% url 'search_results' %}">
+                <input type="text" id="mobile-search-input" name="q" placeholder="What are you searching for?">
                 <button type="submit" ><i class="far fa-search"></i></button>
             </form>
         </div>
+        <div id="mobile-search-suggestions"></div>
         <div class="mobile-menu fix"></div>
         <div class="offcanvas__action">
 
@@ -547,54 +548,54 @@
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script>
-		$(document).ready(function() {
-			const mobileSearchInput = $("#mobile-search-input");
-			const mobileSearchSuggestions = $("#mobile-search-suggestions");
-			const tabletSearchInput = $("#tablet-search-input");
-			const tabletSearchSuggestions = $("#tablet-search-suggestions");
+<script>
+    $(document).ready(function() {
+        const mobileSearchInput = $("#mobile-search-input");
+        const mobileSearchSuggestions = $("#mobile-search-suggestions");
+        const tabletSearchInput = $("#tablet-search-input");
+        const tabletSearchSuggestions = $("#tablet-search-suggestions");
 
-			mobileSearchInput.on("input", function() {
-				const query = mobileSearchInput.val().trim();
-				handleSearchSuggestions(query, mobileSearchSuggestions);
-			});
+        mobileSearchInput.on("input", function() {
+            const query = mobileSearchInput.val().trim();
+            handleSearchSuggestions(query, mobileSearchSuggestions);
+        });
 
-			tabletSearchInput.on("input", function() {
-				const query = tabletSearchInput.val().trim();
-				handleSearchSuggestions(query, tabletSearchSuggestions);
-			});
+        tabletSearchInput.on("input", function() {
+            const query = tabletSearchInput.val().trim();
+            handleSearchSuggestions(query, tabletSearchSuggestions);
+        });
 
-			function handleSearchSuggestions(query, suggestionsElement) {
-				if (query === "") {
-					suggestionsElement.html(""); // Clear suggestions if the query is empty
-					return;
-				}
+        function handleSearchSuggestions(query, suggestionsElement) {
+            if (query === "") {
+                suggestionsElement.html(""); // Clear suggestions if the query is empty
+                return;
+            }
 
-				$.ajax({
-					url: "{% url 'search_suggestions' %}",
-					data: { q: query },
-					success: function(data) {
-						let suggestionsHtml = '';
+            $.ajax({
+                url: "{% url 'search_suggestions' %}",
+                data: { q: query },
+                success: function(data) {
+                    let suggestionsHtml = '';
 
-						if (data.length === 0) {
-							suggestionsHtml = '<div class="no-results">No matches found.</div>';
-						} else {
-							data.forEach(function(suggestion) {
-								suggestionsHtml += `<div class="suggestion">${suggestion}</div>`;
-							});
-						}
+                    if (data.length === 0) {
+                        suggestionsHtml = '<div class="no-results">No matches found.</div>';
+                    } else {
+                        data.forEach(function(suggestion) {
+                            suggestionsHtml += `<div class="suggestion">${suggestion}</div>`;
+                        });
+                    }
 
-						suggestionsElement.html(suggestionsHtml);
+                    suggestionsElement.html(suggestionsHtml);
 
-						// Add click event to suggestions
-						$(".suggestion").click(function() {
-							const suggestionText = $(this).text();
-							mobileSearchInput.val(suggestionText);
-							tabletSearchInput.val(suggestionText);
-							suggestionsElement.html(''); // Clear suggestions
-						});
-					}
-				});
-			}
-		});
-	</script>
+                    // Add click event to suggestions
+                    $(".suggestion").click(function() {
+                        const suggestionText = $(this).text();
+                        mobileSearchInput.val(suggestionText);
+                        tabletSearchInput.val(suggestionText);
+                        suggestionsElement.html(''); // Clear suggestions
+                    });
+                }
+            });
+        }
+    });
+</script>

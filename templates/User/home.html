@@ -81,7 +81,7 @@
                             </div>
                             <div class="features__content">
                                 <h6>FREE DELIVERY</h6>
-                                <p>For all orders over $120</p>
+                                <p>For all orders over ₹50</p>
                             </div>
                         </div>
                     </div>
@@ -344,7 +344,7 @@
                                                             <span>(01 review)</span>
                                                         </div> -->
                                                         <div class="price">
-                                                            <span>{{ product.actual_price }}</span>
+                                                            <span>₹ {{ product.actual_price }}</span>
                                                         </div>
                                                     </div> 
                                                     <a href="{% url 'add_to_cart' product_id=product.id %}">
@@ -389,210 +389,125 @@
                                 <h5 class="st-titile">Top Featured Products</h5>
                             </div>
                             <div class="button-wrap">
-                                <a href="shop.html">See All Product <i class="fal fa-chevron-right"></i></a>
+                                <a href="{% url 'shop' %}">See All Product <i class="fal fa-chevron-right"></i></a>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xl-6 col-lg-12">
-                        <div class="single-features-item single-features-item-d b-radius mb-20">
-                            <div class="row  g-0 align-items-center">
-                                <div class="col-md-6">
-                                    <div class="features-thum">
-                                        <div class="features-product-image w-img">
-                                            <a href=""><img src="{% static 'user/images/3.png' %}" alt=""></a>
-                                        </div>
-                                        <!-- <div class="product__offer">
-                                            <span class="discount">-15%</span>
-                                        </div> -->
-                                        <div class="product-action">
-                                            <a href="#" class="icon-box icon-box-1" data-bs-toggle="modal" data-bs-target="#productModalId">
-                                                <i class="fal fa-eye"></i>
-                                                <i class="fal fa-eye"></i>
-                                            </a>
-                                            <a href="#" class="icon-box icon-box-1">
-                                                <i class="fal fa-heart"></i>
-                                                <i class="fal fa-heart"></i>
-                                            </a>
-                                            <a href="#" class="icon-box icon-box-1">
-                                                <i class="fal fa-layer-group"></i>
-                                                <i class="fal fa-layer-group"></i>
-                                            </a>
+                    {% for product in products_two %}
+                    {% if product.stock == True %}
+                        <div class="col-xl-6 col-lg-12">
+                            <div class="single-features-item single-features-item-d b-radius mb-20">
+                                <div class="row  g-0 align-items-center">
+                                
+                                    <div class="col-md-6">
+                                        <div class="features-thum">
+                                            <div class="features-product-image w-img">
+                                                <a href="{% url 'product_view' product.id %}"><img src="{{ product.image.url }}" alt=""></a>
+                                            </div>
+                                            <!-- <div class="product__offer">
+                                                <span class="discount">-15%</span>
+                                            </div> -->
+                                            <!-- <div class="product-action">
+                                                <a href="#" class="icon-box icon-box-1" data-bs-toggle="modal" data-bs-target="#productModalId">
+                                                    <i class="fal fa-eye"></i>
+                                                    <i class="fal fa-eye"></i>
+                                                </a>
+                                                <a href="#" class="icon-box icon-box-1">
+                                                    <i class="fal fa-heart"></i>
+                                                    <i class="fal fa-heart"></i>
+                                                </a>
+                                                <a href="#" class="icon-box icon-box-1">
+                                                    <i class="fal fa-layer-group"></i>
+                                                    <i class="fal fa-layer-group"></i>
+                                                </a>
+                                            </div> -->
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="product__content product__content-d">
-                                        <h6><a href="">Samsang Galaxy A70 128GB Dual-SIM</a></h6>
-                                        <!-- <div class="rating mb-5">
-                                            <ul class="rating-d">
-                                                <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                            </ul>
-                                            <span>(01 review)</span>
-                                        </div> -->
-                                        <div class="price d-price mb-10">
-                                            <span>$307.00 <del>$110</del></span>
-                                        </div>
-                                        <div class="features-des mb-25">
-                                            <ul>
-                                                <li><a href=""><i class="fas fa-circle"></i> High In Antioxidants, Vitamins And Minerals.</a></li>
-                                                <li><a href=""><i class="fas fa-circle"></i> Improves Digestion.</a></li>
-                                                <li><a href=""><i class="fas fa-circle"></i> Increases Immunity.</a></li>
-                                                <li><a href=""><i class="fas fa-circle"></i> Completely Homemade Product.</a></li>
-                                            </ul>
-                                        </div>
-                                        <div class="cart-option">
-                                            <a href="cart.html" class="cart-btn-2 w-100 mr-10">Add to Cart</a>
-                                            <a href="cart.html" class="transperant-btn"><i class="fal fa-heart"></i></a>
+                                    <div class="col-md-6">
+                                        <div class="product__content product__content-d">
+                                            <h6><a href="{% url 'product_view' product.id %}">{{ product.name }}</a></h6>
+                                            <!-- <div class="rating mb-5">
+                                                <ul class="rating-d">
+                                                    <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                                    <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                                    <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                                    <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                                    <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                                </ul>
+                                                <span>(01 review)</span>
+                                            </div> -->
+                                            <div class="price d-price mb-10">
+                                                <span>₹ {{ product.actual_price }}</span>
+                                            </div>
+                                            <div class="features-des mb-25">
+                                                <ul>
+                                                    <P>{{ product.description }}</P>
+                                                </ul>
+                                            </div>
+                                            <br>
+                                            <br>
+                                            <br>
+
+                                            <div class="cart-option">
+                                                <a href="{% url 'add_to_cart' product.id %}" class="cart-btn-2 w-100 mr-10">Add to Cart</a>
+                                                
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    {% else %}
+                    {% endif %}
+                    {% endfor %}
                     <div class="col-xl-6 col-lg-12">
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="single-features-item b-radius mb-20">
-                                    <div class="row  g-0 align-items-center">
-                                        <div class="col-6">
-                                            <div class="features-thum">
-                                                <div class="features-product-image w-img" style="margin-right: 10px;">
-                                                    <a href=""><img style="height: 100px;" src="{% static 'user/images/mockup _ nadan pickle _ presentation-02.jpg' %}" alt=""></a>
-                                                </div>
-                                                <!-- <div class="product__offer">
-                                                    <span class="discount">-15%</span>
-                                                </div> -->
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="product__content product__content-d">
-                                                <h6><a href="">Epple Watch SE Gold Aluminum</a></h6>
-                                                <!-- <div class="rating mb-5">
-                                                    <ul>
-                                                        <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                        <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                        <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                        <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                        <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                    </ul>
-                                                    <span>(01 review)</span>
-                                                </div> -->
-                                                <div class="price d-price">
-                                                    <span>$307.00 <del>$110</del></span>
+                            {% for product in products_three %}
+                            {% if product.stock == True %}
+                                <div class="col-md-6">
+                                    <div class="single-features-item b-radius mb-20">
+                                        <div class="row  g-0 align-items-center">
+                                            <div class="col-6">
+                                                <div class="features-thum">
+                                                    <div class="features-product-image w-img" style="margin-right: 10px;">
+                                                        <a href="{% url 'product_view' product.id %}"><img style="height: 100px;" src="{{ product.image.url }}" alt=""></a>
+                                                    </div>
+                                                    <!-- <div class="product__offer">
+                                                        <span class="discount">-15%</span>
+                                                    </div> -->
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="single-features-item b-radius mb-20">
-                                    <div class="row  g-0 align-items-center">
-                                        <div class="col-6">
-                                            <div class="features-thum">
-                                                <div class="features-product-image w-img" style="margin-right: 10px;">
-                                                    <a href=""><img style="height: 100px;" src="{% static 'user/images/mockup _ nadan pickle _ presentation-05.jpg' %}" alt=""></a>
-                                                </div>
-                                                <!-- <div class="product__offer">
-                                                    <span class="discount">-5%</span>
-                                                </div> -->
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="product__content product__content-d">
-                                                <h6><a href="">G951s Pink Stereo Gaming Headset</a></h6>
-                                                <!-- <div class="rating mb-5">
-                                                    <ul>
-                                                        <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                        <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                        <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                        <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                        <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                    </ul>
-                                                    <span>(01 review)</span>
-                                                </div> -->
-                                                <div class="price d-price">
-                                                    <span>$307.00 <del>$110</del></span>
+                                            <div class="col-6">
+                                                <div class="product__content product__content-d">
+                                                    <h6><a href="{% url 'product_view' product.id %}">{{ product.name }}</a></h6>
+                                                    <!-- <div class="rating mb-5">
+                                                        <ul>
+                                                            <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                                            <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                                            <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                                            <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                                            <li><a href="#"><i class="fal fa-star"></i></a></li>
+                                                        </ul>
+                                                        <span>(01 review)</span>
+                                                    </div> -->
+                                                    <div class="price d-price">
+                                                        <span>₹ {{ product.actual_price }}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            {% else %}
+                            {% endif %}
+                            {% endfor %}
+                            
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="single-features-item b-radius mb-20">
-                                    <div class="row  g-0 align-items-center">
-                                        <div class="col-6">
-                                            <div class="features-thum">
-                                                <div class="features-product-image w-img" style="margin-right: 10px;">
-                                                    <a href=""><img style="height: 100px;" src="{% static 'user/images/mockup _ nadan pickle _ presentation-07.jpg' %}" alt=""></a>
-                                                </div>
-                                                <!-- <div class="product__offer">
-                                                    <span class="discount">-25%</span>
-                                                </div> -->
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="product__content product__content-d">
-                                                <h6><a href="">Solo3 Wireless On-Ear Headphones</a></h6>
-                                                <!-- <div class="rating mb-5">
-                                                    <ul>
-                                                        <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                        <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                        <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                        <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                        <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                    </ul>
-                                                    <span>(01 review)</span>
-                                                </div> -->
-                                                <div class="price d-price">
-                                                    <span>$307.00 <del>$110</del></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="single-features-item b-radius mb-20">
-                                    <div class="row  g-0 align-items-center">
-                                        <div class="col-6">
-                                            <div class="features-thum">
-                                                <div class="features-product-image w-img" style="margin-right: 10px;">
-                                                    <a href=""><img style="height: 100px;" src="{% static 'user/images/mockup _ nadan pickle _ presentation-08.jpg' %}" alt=""></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="product__content product__content-d">
-                                                <h6><a href="">Men’s Short-Sleeve Pocket Oxford Shirt</a></h6>
-                                                <!-- <div class="rating mb-5">
-                                                    <ul>
-                                                        <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                        <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                        <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                        <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                        <li><a href="#"><i class="fal fa-star"></i></a></li>
-                                                    </ul>
-                                                    <span>(01 review)</span>
-                                                </div> -->
-                                                <div class="price d-price">
-                                                    <span>$307.00 <del>$110</del></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
+                        
+                        
                     </div>
                 </div>
             </div>
@@ -1006,7 +921,7 @@
         <!-- brand-area-end -->
         
         <!-- cta-area-start -->
-        <section class="cta-area d-ldark-bg pt-55 pb-10">
+        <!-- <section class="cta-area d-ldark-bg pt-55 pb-10">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-4 col-md-6">
@@ -1037,7 +952,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="col-lg-4 col-md-6">
+                    <div class="col-lg-4 col-md-6">
                         <div class="cta-item mb-30">
                             <h5 class="cta-title">Download App</h5>
                             <p>DukaMarket App is now available on App Store & Google Play. Get it now.</p>
@@ -1048,11 +963,11 @@
                                 </div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
             </div>
 
-        </section>
+        </section> -->
         <!-- cta-area-end -->
 
         <!-- shop modal start -->
