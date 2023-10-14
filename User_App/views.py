@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from Admin_App.models import Product
+from Admin_App.models import Product, SearchQuery
 from django.contrib import messages
 from User_App.models import *
 from django.http import JsonResponse
@@ -58,15 +58,20 @@ def cart_list(request):
     cart = Cart.objects.filter(user=user,ordered=False).order_by('-id')
     
     subtotal = sum(x.total for x in cart if not x.ordered)
-    total_of_total = subtotal + 8
 
-    if subtotal >= 50:
-        total_of_total = subtotal
+    if subtotal >=50:
+        shipping_charge = 0
+    else:
+        shipping_charge = 8
+    
+    total_of_total = subtotal + shipping_charge
+
 
     context = {
         'current_page': current_page,
         'cart' : cart,
         'subtotal' :subtotal,
+        'shipping_charge' : shipping_charge,
         'total_of_total' : total_of_total
     }
     return render(request, 'User/cart_list.html', context)
@@ -187,14 +192,21 @@ def add_to_cart_two(request, product_id):
 def order(request):
     cart = Cart.objects.filter(user=request.user, ordered=False).order_by('-id')
 
-    # subtotal = sum(x.total for x in cart)
-    # total_of_total = sum(x.total for x in cart if not x.ordered) + 8
+    order_unpaid = Order.objects.filter(paid=False)
+    order_unpaid.delete() # deleteing uwanted orders
 
+    
     subtotal = sum(x.total for x in cart if not x.ordered)
-    total_of_total = subtotal + 8
 
-    if subtotal >= 50:
-        total_of_total = subtotal
+    if subtotal >=50:
+        shipping_charge = 0
+    else:
+        shipping_charge = 8
+    
+    total_of_total = subtotal + shipping_charge
+
+    # if subtotal >= 50:
+    #     total_of_total = subtotal
 
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
@@ -214,19 +226,24 @@ def order(request):
             postel_code=postel_code,
             order_note=order_note,
             phone=phone,
+            subtotal=subtotal,
+            shipping_charge=shipping_charge,
             total_of_total=total_of_total
         )
         order.cart.set(cart)  # For adding cart items assosiated with user (its manytomanyfield thats way using this)
 
-        for field in cart:
-            field.ordered = True
-            field.save()
+        
+
+        # for field in cart:
+        #     field.ordered = True
+        #     field.save()
         messages.success(request, f"")
         return redirect('payment' , order_id=order.id)
     
     context = {
         'cart' : cart,
         'subtotal' : subtotal,
+        'shipping_charge' : shipping_charge,
         'total_of_total' : total_of_total
     }
 
@@ -235,13 +252,12 @@ def order(request):
 
 
 def payment(request,order_id):
-    order = Order.objects.get(id=order_id)
+    try:
+        order = Order.objects.get(id=order_id)
+    except:
+        return redirect('home')
 
-    subtotal = sum(x.total for x in order.cart.all())
-    total_of_total = subtotal + 8
-
-    if subtotal >= 50:
-        total_of_total = subtotal
+    total_of_total = order.total_of_total
 
     total_in_cents = int(total_of_total * 100)
 
@@ -255,7 +271,6 @@ def payment(request,order_id):
     context = {
         'payment' : payment,
         'order' : order,
-        'subtotal' : subtotal,
         'total_of_total' : total_of_total
     }
 
@@ -271,6 +286,12 @@ def payment_completed_view(request,order_id):
     order.paid = True
     
     order.save()
+
+    carts = order.cart
+
+    carts.update(
+        ordered = True
+    )
     
     context = {
         
@@ -298,6 +319,15 @@ def blog(request):
 def search_results(request):
     search_query = request.GET.get('q')
     products = Product.objects.filter(name__icontains=search_query)
+
+    # Check if any products were found
+    if products:
+        product = products.first()  # Get the first product from the queryset
+        search_obj, created = SearchQuery.objects.get_or_create(product=product)
+        search_obj.count += 1
+        search_obj.save()
+    else:
+        product = None
 
     context = {
         'search_query': search_query,
@@ -454,3 +484,8 @@ def header(request):
         'cart_count' : cart_count
     }
     return render(request, 'User/header.html', context)
+
+
+
+
+

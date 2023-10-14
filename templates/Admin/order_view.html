@@ -140,13 +140,13 @@
                                         <span>{{ cart.quantity }}</span>
                                         <span class="text-muted ms-1 me-1">x</span>
                                         <span>
-                                          <span class="text-small">AUD</span>
+                                          <span class="text-small">₹</span>
                                           {{ cart.price_dummy }}
                                         </span>
                                       </div>
                                       <div class="col-6 d-flex flex-row align-items-end justify-content-end text-alternate">
                                         <span>
-                                          <span class="text-small">AUD</span>
+                                          <span class="text-small">₹</span>
                                           {{ cart.total }}
                                         </span>
                                       </div>
@@ -164,38 +164,30 @@
                           <div class="col-auto ms-auto ps-3 text-muted">Total</div>
                           <div class="col-auto sw-13 text-end">
                             <span>
-                              <span class="text-small text-muted">AUD</span>
-                              {{ subtotal }}
+                              <span class="text-small text-muted">₹</span>
+                              {{ order.subtotal }}
                             </span>
                           </div>
                         </div>
-                        {% if subtotal >= 50 %}
-                          <div class="row g-0 mb-2">
-                            <div class="col-auto ms-auto ps-3 text-muted">Shipping</div>
-                            <div class="col-auto sw-13 text-end">
-                              <span>
-                                <span class="text-small text-muted">AUD</span>
-                                0
-                              </span>
-                            </div>
+                        
+                        <div class="row g-0 mb-2">
+                          <div class="col-auto ms-auto ps-3 text-muted">Shipping</div>
+                          <div class="col-auto sw-13 text-end">
+                            <span>
+                              <span class="text-small text-muted">₹</span>
+                              {{ order.shipping_charge }}
+                            </span>
                           </div>
-                        {% else %}
-                          <div class="row g-0 mb-2">
-                            <div class="col-auto ms-auto ps-3 text-muted">Shipping</div>
-                            <div class="col-auto sw-13 text-end">
-                              <span>
-                                <span class="text-small text-muted">AUD</span>
-                                8
-                              </span>
-                            </div>
-                          </div>
-                        {% endif %}
+                        </div>
+                        
+                          
+                   
                           
                         <!-- <div class="row g-0 mb-2">
                           <div class="col-auto ms-auto ps-3 text-muted">Sale</div>
                           <div class="col-auto sw-13 text-end">
                             <span>
-                              <span class="text-small text-muted">AUD</span>
+                              <span class="text-small text-muted">₹</span>
                               -24.50
                             </span>
                           </div>
@@ -204,8 +196,8 @@
                           <div class="col-auto ms-auto ps-3 text-muted">Grand Total</div>
                           <div class="col-auto sw-13 text-end">
                             <span>
-                              <span class="text-small text-muted">AUD</span>
-                              {{ total_of_total }}
+                              <span class="text-small text-muted">₹</span>
+                              {{ order.total_of_total }}
                             </span>
                           </div>
                         </div>

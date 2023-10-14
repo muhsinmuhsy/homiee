@@ -104,15 +104,11 @@
 									<h2>Cart totals</h2>
 									<ul class="mb-20">
 											<li>Subtotal <span>₹{{ subtotal }}</span></li>
-											{% if subtotal >= 50 %}
+											
 												<li>
-													Shipping<span>₹0</span> 
+													Shipping<span>₹{{ shipping_charge }}</span> 
 												</li>
-											{% else %}
-												<li>
-													Shipping<span>₹8</span> 
-												</li>
-											{% endif %}
+											
 										<li>Total <span>₹{{ total_of_total }}</span></li>
 									</ul>
 									<a class="tp-btn-h1" href="{% url 'order' %}">Proceed to checkout</a>

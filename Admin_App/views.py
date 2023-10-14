@@ -12,24 +12,41 @@ from django.db.models import Sum, F, Case, When, Value
 @user_passes_test(lambda u: u.is_superuser, login_url='/U_Auth/admin_login/')
 def dashboard(request):
     # Calculate the sum of total_of_total for paid orders
-    earnings = Order.objects.filter(paid=True).aggregate(Sum('total_of_total'))['total_of_total__sum']
+    # earnings = Order.objects.filter(paid=True).aggregate(Sum('total_of_total'))['total_of_total__sum']
 
     # If there are no paid orders, earnings will be None, so you can handle it accordingly
-    if earnings is not None:
-        earnings = round(earnings, 2)
+    # if earnings is not None:
+    #     earnings = round(earnings, 2)
+
+    # Get a queryset of paid orders
+    paid_orders = Order.objects.filter(paid=True)
+
+    # Calculate total earnings using a list comprehension
+    earnings = sum(order.total_of_total for order in paid_orders)
+
         
     order_count = Order.objects.filter(paid=True).count()
+
+    order_pending_count = Order.objects.filter(paid=True, status='PENDING').count()
     
     user_count = User.objects.filter(is_customer=True).count()
     review_count =  Review.objects.count()
     product_count = Product.objects.count()
+
+    # search count
+    top_searches = SearchQuery.objects.order_by('-count')[:10]
+
+    activities = Activity.objects.all().order_by('-id')[:10]
       
     context = {
         'order_count' : order_count,
         'earnings' : earnings,
         'user_count' : user_count,
         'product_count' : product_count,
-        'review_count' : review_count
+        'review_count' : review_count,
+        'top_searches' : top_searches,
+        'order_pending_count' : order_pending_count,
+        'activities' : activities,
 
     }
     return render(request, 'Admin/dashboard.html', context)
@@ -57,6 +74,7 @@ def add_product(request):
 
         try:
             product = Product.objects.create(name=name, image=image, image_two=image_two, description=description, actual_price=actual_price, discount_price=discount_price, stock=stock)
+            activity = Activity.objects.create(text=f'New Product ({product.name}) added')
             return redirect('product_list')
         except ValidationError as e:
             error_message = str(e)
@@ -98,6 +116,7 @@ def edit_product(request, pk):
         product.stock = stock
         product.save()
         
+        activity = Activity.objects.create(text=f'Existing Product ({product.name}) Edited')
         messages.success(request,'success')
         return redirect('product_list')
 
@@ -108,6 +127,7 @@ def edit_product(request, pk):
 def delete_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
     product.delete()
+    activity = Activity.objects.create(text=f' Product ({product.name}) Deleted')
     return redirect('product_list')
     
 # @user_passes_test(lambda u: u.is_superuser, login_url='/U_Auth/admin_login/')
@@ -145,16 +165,18 @@ def all_order(request):
     current_page = 'all_order'
     
     # Retrieve all orders with the total amount for each order
-    orders = Order.objects.annotate(total_amount=Sum('cart__total')).filter( paid = True).order_by('-id')
+    # orders = Order.objects.annotate(total_amount=Sum('cart__total')).filter( paid = True).order_by('-id')
 
-    # Add 8 to the total_amount for each order if it's less than 50, otherwise keep it as is
-    orders = orders.annotate(
-        total_amount_with_8=Case(
-            When(total_amount__lt=50, then=F('total_amount') + 8),
-            default=F('total_amount'),
-            output_field=models.DecimalField(decimal_places=2, max_digits=10)
-        )
-    ).order_by('-id')
+    # # Add 8 to the total_amount for each order if it's less than 50, otherwise keep it as is
+    # orders = orders.annotate(
+    #     total_amount_with_8=Case(
+    #         When(total_amount__lt=50, then=F('total_amount') + 8),
+    #         default=F('total_amount'),
+    #         output_field=models.DecimalField(decimal_places=2, max_digits=10)
+    #     )
+    # ).order_by('-id')
+
+    orders = Order.objects.filter(paid=True).order_by('-id')
 
     context = {
         'current_page': current_page,
@@ -186,16 +208,16 @@ def order_view(request, order_id):
     # subtotal = sum(x.total for x in order.cart.all())
     # total_of_total = sum(x.total for x in order.cart.all()) + 8
 
-    subtotal = sum(x.total for x in order.cart.all())
-    total_of_total = subtotal + 8
+    # subtotal = sum(x.total for x in order.cart.all())
+    # total_of_total = subtotal + 8
 
-    if subtotal >= 50:
-        total_of_total = subtotal
+    # if subtotal >= 50:
+    #     total_of_total = subtotal
 
     context = {
         'order' : order,
-        'subtotal' : subtotal,
-        'total_of_total' : total_of_total
+        # 'subtotal' : subtotal,
+        # 'total_of_total' : total_of_total
     }
     return render(request, 'Admin/order_view.html', context)
 

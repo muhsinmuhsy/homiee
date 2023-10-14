@@ -22,6 +22,11 @@ class Cart(models.Model):
     # for ordered cart not selecting in order
     ordered = models.BooleanField(default=False)
 
+    def __str__(self):
+        return str(self.price_dummy)
+
+
+
 # automatically saving price dummy from productvariant price 
 @receiver(pre_save, sender=Cart)
 def auto_save_price_dummy(sender, instance, **kwargs):
@@ -55,14 +60,17 @@ class Order(models.Model):
     postel_code = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
     phone = models.CharField(max_length=12)
-    order_note = models.CharField(max_length=250, default="")
+    order_note = models.CharField(max_length=250, null=True, blank=True)
+    subtotal = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    shipping_charge = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     total_of_total = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     date = models.DateField(auto_now_add=True)
     status = models.CharField(max_length=100, choices=STATUS, default='PENDING')
     delivery_espected = models.CharField(max_length=100, null=True, blank=True)
     paid= models.BooleanField(default=False)
     transaction_id = models.CharField(max_length=100, null=True, blank=True)
-
+    
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 
 class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

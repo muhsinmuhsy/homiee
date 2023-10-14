@@ -112,7 +112,7 @@
 											{% for cart in order.cart.all %}
 												<tr class="cart_item">
 													<td class="product-name">
-														{{ cart.product.name }} <strong class="product-quantity"> × {{ cart.quantity }}</strong>
+														{{ cart.product.name }} <strong class="product-quantity">{{ cart.price_dummy }} × {{ cart.quantity }}</strong>
 													</td>
 													<td class="product-total">
 														<span class="amount">{{ cart.total }}</span>
@@ -123,27 +123,20 @@
 										<tfoot>
 											<tr class="cart-subtotal">
 												<th>Cart Subtotal</th>
-												<td><span class="amount">{{ subtotal }}</span></td>
+												<td><span class="amount">{{ order.subtotal }}</span></td>
 											</tr>
 											<tr class="shipping">
 												<th>Shipping</th>
 												<td>
 													<ul>
-														{% if subtotal >= 50 %}
-															<li>
-																
-																<label>
-																	<span class="amount">0</span>
-																</label>
-															</li>
-														{% else %}
-															<li>
-																	
-																<label>
-																	<span class="amount">8</span>
-																</label>
-															</li>
-														{% endif %}
+													
+														<li>
+															
+															<label>
+																<span class="amount">{{ order.shipping_charge }}</span>
+															</label>
+														</li>
+														
 													</ul>
 												</td>
 											</tr>

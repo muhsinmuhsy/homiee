@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login
 from U_Auth.models import  User
 from django.contrib import messages
 from django.contrib.auth import logout
+from Admin_App.models import Activity
 
 
 def register(request):
@@ -40,6 +41,8 @@ def register(request):
             # Log the user in after registration
             user = authenticate(request, username=username, password=password)
             login(request, user)
+
+            activity = Activity.objects.create(text=f'New Customer ({user.first_name} {user.last_name}) Registered')
             
             messages.success(request, 'Registered Successfully and logged in.')
             return redirect('home')

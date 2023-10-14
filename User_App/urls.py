@@ -29,6 +29,8 @@ urlpatterns = [
     path('payment-failed/',payment_failed_view,name='payment-failed'),
     path('payment/<int:order_id>/',payment,name='payment'),
 
+    
+
 
     path('header', header, name='header')
     ]
