@@ -22,37 +22,31 @@
 								<h3>Billing Details</h3>
 								
 								<div class="row">
-									<div class="col" id="SelectAddress" >
+									<div class="col"  id="SelectAddress">
 										<label for="place_order">Select a saved address:</label>
-										<select name="place_order" id="placeorder">
+										<select name="place_order" id="address">
 											<option value="">-- Select an address --</option>
 											{% for place_order in place_orders %}
 												<option value="{{ place_order.id }}">{{ place_order.first_name }} {{ place_order.last_name }} - {{ place_order.address }}</option>
 											{% endfor %}
 										</select>
 									</div>
-										
 									<div class="col">
-										
 										
 										<p >Crete new palc order</p>
 										<input type="checkbox" id="newAddressCheckBox">
-										
+
 										
 									</div>
 								</div>
-
-								<div id="PlaceOrderList">
-									<p id="first_name"></p>
-									<p id="last_name"></p>
-									<p id="address"></p>
-									<p id="city"></p>
-									<p id="phone"></p>
-									<p id="postel_code"></p>
-									<p id="order_note"></p>
-								</div>
 								
-								
+								<p id="first_name"></p>
+								<p id="last_name"></p>
+								<p id="address"></p>
+								<p id="city"></p>
+								<p id="phone"></p>
+								<p id="postel_code"></p>
+								<p id="order_note"></p>
 
 									
 								<div class="row" id="NewAddress">
@@ -202,62 +196,44 @@
 	
 	<script>
 		$(document).ready(function(){
-			$('#placeorder').on('change', function(){
-				var placeorder_id = $('#placeorder').val();
+			$('#address').on('change', function(){
+				var address_id = $('#address').val();
 				
-				if (placeorder_id) {
-                $.ajax({
-                    url: '{% url "get-placeorder" %}',
-                    type: 'POST',
-                    data: {'placeorder_id': placeorder_id},
-        
-                    success: function(response){
-                        console.log(response.response);
-                        $('#first_name').text(response.placeorder.first_name);
-                        $('#last_name').text(response.placeorder.last_name);
-                        $('#addres').text(response.placeorder.address);
-                        $('#city').text(response.placeorder.city);
-                        $('#phone').text(response.placeorder.phone);
-                        $('#postel_code').text(response.placeorder.postel_code);
-                        $('#order_note').text(response.placeorder.order_note);
-                    }
-                });
-            } else {
-                // Clear the displayed fields when no item is selected
-                $('#first_name').text('');
-                $('#last_name').text('');
-                $('#addres').text('');
-                $('#city').text('');
-                $('#phone').text('');
-                $('#postel_code').text('');
-                $('#order_note').text('');
-            }
+				$.ajax({
+					url: '{% url "get-address" %}',
+					type: 'POST',
+					data: {'address_id': address_id},
+		
+					success: function(response){
+						console.log(response.response);
+						$('#first_name').text(response.address.first_name); // Use .text() to set the text content
+						$('#last_name').text(response.address.last_name);
+						$('#address').text(response.address.address);
+						$('#city').text(response.address.city);
+						$('#phone').text(response.address.phone);
+						$('#postel_code').text(response.address.postel_code);
+						$('#order_note').text(response.address.order_note);
+					}
+				});
 			});
 		});
 	</script>
 	
-	
 
-
-  
-
-  <script>
+<script>
 	// Get the radio button and the "NewAddress" div
 	const newAddressCheckBox = document.getElementById("newAddressCheckBox");
 	const newAddressDiv = document.getElementById("NewAddress");
 	const SelectAddressDiv = document.getElementById("SelectAddress");
-	const PlaceOrderListDiv = document.getElementById("PlaceOrderList");
   
 	// Function to toggle the visibility of the "NewAddress" div
 	function toggleNewAddress() {
 	  if (newAddressCheckBox.checked) {
 		newAddressDiv.style.display = "flex";
-		SelectAddressDiv.style.display = "none";
-		PlaceOrderListDiv.style.display = "none"
+		SelectAddressDiv.style.display = "none"
 	  } else {
 		newAddressDiv.style.display = "none";
 		SelectAddressDiv.style.display = "block"
-		PlaceOrderListDiv.style.display = "block"
 	  }
 	}
   
@@ -267,6 +243,7 @@
 	// Call the function initially to set the initial state
 	toggleNewAddress();
   </script>
+  
 	
 </main>
 	{% include 'User/footer.html' %}

@@ -44,6 +44,16 @@ def auto_cart_total(sender, instance, **kwargs):
     instance.total = instance.price_dummy * instance.quantity   
 
 
+class PlaceOrder(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
+    postel_code = models.CharField(max_length=100)
+    address = models.CharField(max_length=100)
+    phone = models.CharField(max_length=12)
+    order_note = models.CharField(max_length=250, null=True, blank=True)
+
 
 class Order(models.Model):
     STATUS = (
@@ -54,13 +64,7 @@ class Order(models.Model):
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     cart = models.ManyToManyField(Cart)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
-    postel_code = models.CharField(max_length=100)
-    address = models.CharField(max_length=100)
-    phone = models.CharField(max_length=12)
-    order_note = models.CharField(max_length=250, null=True, blank=True)
+    place_order = models.ForeignKey(PlaceOrder, on_delete=models.CASCADE, default=False)
     subtotal = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     shipping_charge = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     total_of_total = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)

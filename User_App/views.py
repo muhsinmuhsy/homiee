@@ -188,25 +188,160 @@ def add_to_cart_two(request, product_id):
 
 ###############################################################################################################################
 
+# @login_required
+# def order(request):
+#     user = request.user
+#     cart = Cart.objects.filter(user=user, ordered=False).order_by('-id')
+
+#     place_orders = PlaceOrder.objects.all()
+#     order_unpaid = Order.objects.filter(paid=False)
+#     order_unpaid.delete() # deleteing uwanted orders
+ 
+#     subtotal = sum(x.total for x in cart if not x.ordered)
+
+#     if subtotal >=50:
+#         shipping_charge = 0
+#     else:
+#         shipping_charge = 8
+    
+#     total_of_total = subtotal + shipping_charge
+
+#     # if subtotal >= 50:
+#     #     total_of_total = subtotal
+
+#     if request.method == 'POST':
+#         first_name = request.POST.get('first_name')
+#         last_name = request.POST.get('last_name')
+#         address = request.POST.get('address')
+#         city = request.POST.get('city')
+#         postel_code = request.POST.get('postel_code')
+#         phone = request.POST.get('phone')
+#         order_note = request.POST.get('order_note')
+
+
+#         place_order = PlaceOrder(
+#             user=user,
+#             first_name=first_name,
+#             last_name=last_name,
+#             address=address,
+#             city=city,
+#             postel_code=postel_code,
+#             order_note=order_note,
+#             phone=phone,
+#         )
+#         place_order.save()
+#         order = Order.objects.create(
+#             user=user,
+#             subtotal=subtotal,
+#             shipping_charge=shipping_charge,
+#             total_of_total=total_of_total,
+#             place_order=place_order
+#         )
+#         order.cart.set(cart)  # For adding cart items assosiated with user (its manytomanyfield thats way using this)
+
+#         # for field in cart:
+#         #     field.ordered = True
+#         #     field.save()
+#         messages.success(request, f"")
+#         return redirect('payment' , order_id=order.id)
+    
+#     context = {
+#         'cart' : cart,
+#         'subtotal' : subtotal,
+#         'shipping_charge' : shipping_charge,
+#         'place_orders' : place_orders,
+#         'total_of_total' : total_of_total
+#     }
+
+#     return render(request, 'User/order.html', context)
+
+
+# @login_required
+# def order(request):
+#     cart = Cart.objects.filter(user=request.user, ordered=False).order_by('-id')
+
+#     order_unpaid = Order.objects.filter(paid=False)
+#     order_unpaid.delete()  # Deleting unwanted orders
+
+#     place_orders = PlaceOrder.objects.filter(user=request.user)
+
+#     subtotal = sum(x.total for x in cart if not x.ordered)
+
+#     if subtotal >= 50:
+#         shipping_charge = 0
+#     else:
+#         shipping_charge = 8
+
+#     total_of_total = subtotal + shipping_charge
+
+#     if request.method == 'POST':
+#         first_name = request.POST.get('first_name')
+#         last_name = request.POST.get('last_name')
+#         address = request.POST.get('address')
+#         city = request.POST.get('city')
+#         postel_code = request.POST.get('postel_code')
+#         phone = request.POST.get('phone')
+#         order_note = request.POST.get('order_note')
+#         place_order_id = request.POST.get('place_order')
+
+#         if place_order_id:
+#             # If a saved address is selected, use that place_order
+#             selected_place_order = PlaceOrder.objects.get(id=place_order_id)
+#             place_order = selected_place_order
+#         else:
+#             # If a new address is provided, create a new PlaceOrder
+#             place_order = PlaceOrder(
+#                 user=request.user,
+#                 first_name=first_name,
+#                 last_name=last_name,
+#                 address=address,
+#                 city=city,
+#                 postel_code=postel_code,
+#                 order_note=order_note,
+#                 phone=phone,
+#             )
+#             place_order.save()
+
+#         order = Order.objects.create(
+#             user=request.user,
+#             subtotal=subtotal,
+#             shipping_charge=shipping_charge,
+#             total_of_total=total_of_total,
+#             place_order=place_order  # Use the selected or newly created place_order
+#         )
+#         order.cart.set(cart)
+
+#         messages.success(request, "Order placed successfully")
+#         return redirect('payment', order_id=order.id)
+
+#     context = {
+#         'cart': cart,
+#         'subtotal': subtotal,
+#         'shipping_charge': shipping_charge,
+#         'total_of_total': total_of_total,
+#         'place_orders': place_orders,
+#     }
+
+#     return render(request, 'User/order.html', context)
+
+
 @login_required
 def order(request):
     cart = Cart.objects.filter(user=request.user, ordered=False).order_by('-id')
 
     order_unpaid = Order.objects.filter(paid=False)
-    order_unpaid.delete() # deleteing uwanted orders
+    order_unpaid.delete()  # Deleting unwanted orders
 
-    
+    place_orders = PlaceOrder.objects.filter(user=request.user)
+
     subtotal = sum(x.total for x in cart if not x.ordered)
 
-    if subtotal >=50:
+    if subtotal >= 50:
         shipping_charge = 0
     else:
         shipping_charge = 8
-    
-    total_of_total = subtotal + shipping_charge
 
-    # if subtotal >= 50:
-    #     total_of_total = subtotal
+    total_of_total = subtotal + shipping_charge
 
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
@@ -216,38 +351,48 @@ def order(request):
         postel_code = request.POST.get('postel_code')
         phone = request.POST.get('phone')
         order_note = request.POST.get('order_note')
+        place_order_id = request.POST.get('place_order')
+
+        if place_order_id:
+            # If a saved address is selected, use that place_order
+            selected_place_order = PlaceOrder.objects.get(id=place_order_id)
+            place_order = selected_place_order
+        else:
+            # If a new address is provided, create a new PlaceOrder
+            place_order = PlaceOrder(
+                user=request.user,
+                first_name=first_name,
+                last_name=last_name,
+                address=address,
+                city=city,
+                postel_code=postel_code,
+                order_note=order_note,
+                phone=phone,
+            )
+            place_order.save()
 
         order = Order.objects.create(
             user=request.user,
-            first_name=first_name,
-            last_name=last_name,
-            address=address,
-            city=city,
-            postel_code=postel_code,
-            order_note=order_note,
-            phone=phone,
             subtotal=subtotal,
             shipping_charge=shipping_charge,
-            total_of_total=total_of_total
+            total_of_total=total_of_total,
+            place_order=place_order  # Use the selected or newly created place_order
         )
-        order.cart.set(cart)  # For adding cart items assosiated with user (its manytomanyfield thats way using this)
+        order.cart.set(cart)
 
-        
+        messages.success(request, "Order placed successfully")
+        return redirect('payment', order_id=order.id)
 
-        # for field in cart:
-        #     field.ordered = True
-        #     field.save()
-        messages.success(request, f"")
-        return redirect('payment' , order_id=order.id)
-    
     context = {
-        'cart' : cart,
-        'subtotal' : subtotal,
-        'shipping_charge' : shipping_charge,
-        'total_of_total' : total_of_total
+        'cart': cart,
+        'subtotal': subtotal,
+        'shipping_charge': shipping_charge,
+        'total_of_total': total_of_total,
+        'place_orders': place_orders,
     }
 
     return render(request, 'User/order.html', context)
+
 
 
 
